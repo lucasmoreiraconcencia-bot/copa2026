@@ -11,6 +11,7 @@ import { CHAMPION_POINTS } from "@/lib/scoring";
 import { ChampionPicker } from "@/components/ChampionPicker";
 import { TeamPill } from "@/components/TeamPill";
 import { PageHeader } from "@/components/PageHeader";
+import { PaymentNotice } from "@/components/PaymentNotice";
 import type { Team } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -44,6 +45,18 @@ export default async function CampeaoPage() {
           As seleções ainda não foram sincronizadas. Peça ao administrador para
           rodar a sincronização.
         </p>
+      ) : !locked && !user.is_paid ? (
+        <div>
+          <PaymentNotice />
+          {mine && (
+            <div className="card p-4">
+              <p className="text-sm text-white/60">Seu palpite atual</p>
+              <div className="mt-1 text-lg font-bold">
+                <TeamPill team={teamMap.get(mine.team_id)} />
+              </div>
+            </div>
+          )}
+        </div>
       ) : !locked ? (
         <ChampionPicker teams={teams} initialTeamId={mine?.team_id ?? null} />
       ) : (

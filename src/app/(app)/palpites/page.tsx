@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { Crown, ListOrdered, GitFork, ChevronRight } from "lucide-react";
+import { requireUser } from "@/lib/auth";
 import { getSettings, getGroups, getRoundLocks } from "@/lib/data";
 import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { PageHeader } from "@/components/PageHeader";
+import { PaymentNotice } from "@/components/PaymentNotice";
 
 export const dynamic = "force-dynamic";
 
 export default async function PalpitesHub() {
+  const user = await requireUser();
   const [settings, groups, locks] = await Promise.all([
     getSettings(),
     getGroups(),
@@ -53,6 +56,8 @@ export default async function PalpitesHub() {
         title="Seus palpites"
         subtitle="Palpite não enviado a tempo = 0 ponto."
       />
+
+      {!user.is_paid && <PaymentNotice />}
 
       <div className="space-y-3">
         {cards.map(({ Icon, ...c }) => (

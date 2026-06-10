@@ -10,6 +10,7 @@ import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { TeamPill } from "@/components/TeamPill";
 import { GroupPredictionForm } from "@/components/GroupPredictionForm";
 import { PageHeader } from "@/components/PageHeader";
+import { PaymentNotice } from "@/components/PaymentNotice";
 import type { Team, PredictionGroup, GroupStanding } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -40,6 +41,8 @@ export default async function GruposPage() {
         subtitle="Ordene 1º a 4º de cada grupo. Pontos: 1º=5, 2º=3, 3º=2, 4º=0."
       />
 
+      {!user.is_paid && <PaymentNotice />}
+
       <div className="space-y-4">
         {groups.map((g) => {
           const teams = (teamsByGroup.get(g.letter) ?? []).slice().sort((a, b) =>
@@ -61,12 +64,28 @@ export default async function GruposPage() {
                 </span>
               </div>
 
-              {!locked && teams.length >= 4 && (
+              {!locked && teams.length >= 4 && user.is_paid && (
                 <GroupPredictionForm
                   groupLetter={g.letter}
                   teams={teams}
                   initial={initial}
                 />
+              )}
+              {!locked && teams.length >= 4 && !user.is_paid && (
+                initial ? (
+                  <ol className="space-y-1">
+                    {initial.map((id, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <span className="w-6 text-white/50">{POS_LABEL[i]}</span>
+                        <TeamPill team={teams.find((t) => t.id === id)} size="sm" />
+                      </li>
+                    ))}
+                  </ol>
+                ) : (
+                  <p className="text-sm text-white/50">
+                    Bloqueado até a confirmação do pagamento.
+                  </p>
+                )
               )}
               {!locked && teams.length < 4 && (
                 <p className="text-sm text-white/50">

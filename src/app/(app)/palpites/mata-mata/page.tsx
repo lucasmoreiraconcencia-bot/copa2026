@@ -11,6 +11,7 @@ import { ROUND_LABELS, ROUND_POINTS } from "@/lib/scoring";
 import { MatchPredictionForm } from "@/components/MatchPredictionForm";
 import { TeamPill } from "@/components/TeamPill";
 import { PageHeader } from "@/components/PageHeader";
+import { PaymentNotice } from "@/components/PaymentNotice";
 import type { RoundCode, Team, Match } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -57,6 +58,8 @@ export default async function MataMataPage() {
         subtitle="Escolha quem avança. Vale quem passar (inclui prorrogação/pênaltis)."
       />
 
+      {!user.is_paid && <PaymentNotice />}
+
       {!anyMatches && (
         <p className="card p-6 text-center text-white/50">
           Os confrontos do mata-mata aparecem aqui quando a fase de grupos
@@ -96,13 +99,29 @@ export default async function MataMataPage() {
 
                   return (
                     <div key={m.id} className="card p-3">
-                      {!locked && home && away ? (
+                      {!locked && home && away && user.is_paid ? (
                         <MatchPredictionForm
                           matchId={m.id}
                           home={home}
                           away={away}
                           initialPick={mine?.picked_team_id ?? null}
                         />
+                      ) : !locked && home && away ? (
+                        <div>
+                          <div className="flex items-center justify-between text-sm">
+                            <TeamPill team={home} size="sm" />
+                            <span className="px-2 text-white/40">×</span>
+                            <TeamPill team={away} size="sm" />
+                          </div>
+                          <p className="mt-2 text-xs text-white/60">
+                            Seu palpite:{" "}
+                            <b className="text-white/80">
+                              {mine
+                                ? teamMap.get(mine.picked_team_id)?.name ?? "?"
+                                : "— (bloqueado até confirmar o pagamento)"}
+                            </b>
+                          </p>
+                        </div>
                       ) : !locked ? (
                         <p className="text-center text-sm text-white/40">
                           Confronto a definir

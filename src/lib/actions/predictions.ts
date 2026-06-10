@@ -8,6 +8,23 @@ export interface ActionResult {
   error?: string;
 }
 
+const PAYMENT_ERROR =
+  "Pagamento pendente — seus palpites serão liberados quando o administrador confirmar o pagamento.";
+
+/** Retorna mensagem de erro se o usuário ainda não foi marcado como pago. */
+async function checkPaid(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+): Promise<string | null> {
+  const { data } = await supabase
+    .from("profiles")
+    .select("is_paid, is_active")
+    .eq("id", userId)
+    .single();
+  if (!data?.is_paid || !data?.is_active) return PAYMENT_ERROR;
+  return null;
+}
+
 /** Salva (ou atualiza) o palpite de classificação de um grupo. */
 export async function saveGroupPrediction(
   groupLetter: string,
@@ -18,6 +35,9 @@ export async function saveGroupPrediction(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: "Sessão expirada. Entre novamente." };
+
+  const paymentError = await checkPaid(supabase, user.id);
+  if (paymentError) return { error: paymentError };
 
   if (new Set(order).size !== 4) {
     return { error: "Escolha 4 seleções diferentes (uma por posição)." };
@@ -55,6 +75,9 @@ export async function saveMatchPrediction(
   } = await supabase.auth.getUser();
   if (!user) return { error: "Sessão expirada. Entre novamente." };
 
+  const paymentError = await checkPaid(supabase, user.id);
+  if (paymentError) return { error: paymentError };
+
   const { error } = await supabase.from("predictions_match").upsert(
     {
       user_id: user.id,
@@ -82,6 +105,9 @@ export async function saveChampionPrediction(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { error: "Sessão expirada. Entre novamente." };
+
+  const paymentError = await checkPaid(supabase, user.id);
+  if (paymentError) return { error: paymentError };
 
   const { error } = await supabase.from("predictions_champion").upsert(
     {

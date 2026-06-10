@@ -168,6 +168,15 @@ returns boolean language sql security definer stable as $$
   );
 $$;
 
+-- Helper: o usuário atual pagou a taxa? (palpites só com pagamento confirmado)
+create or replace function public.has_paid()
+returns boolean language sql security definer stable as $$
+  select exists(
+    select 1 from public.profiles
+     where id = auth.uid() and is_paid = true and is_active = true
+  );
+$$;
+
 -- ---- Leitura pública (autenticada) de dados do torneio ----
 drop policy if exists "read teams"   on public.teams;
 create policy "read teams" on public.teams for select to authenticated using (true);
@@ -196,9 +205,10 @@ create policy "own group preds select" on public.predictions_group for select to
 
 drop policy if exists "own group preds write" on public.predictions_group;
 create policy "own group preds write" on public.predictions_group for all to authenticated
-  using (user_id = auth.uid())
+  using (user_id = auth.uid() and public.has_paid())
   with check (
     user_id = auth.uid()
+    and public.has_paid()
     and not exists (
       select 1 from public.groups g
        where g.letter = group_letter
@@ -213,9 +223,10 @@ create policy "own match preds select" on public.predictions_match for select to
 
 drop policy if exists "own match preds write" on public.predictions_match;
 create policy "own match preds write" on public.predictions_match for all to authenticated
-  using (user_id = auth.uid())
+  using (user_id = auth.uid() and public.has_paid())
   with check (
     user_id = auth.uid()
+    and public.has_paid()
     and exists (
       select 1
         from public.matches m
@@ -233,9 +244,10 @@ create policy "own champion select" on public.predictions_champion for select to
 
 drop policy if exists "own champion write" on public.predictions_champion;
 create policy "own champion write" on public.predictions_champion for all to authenticated
-  using (user_id = auth.uid())
+  using (user_id = auth.uid() and public.has_paid())
   with check (
     user_id = auth.uid()
+    and public.has_paid()
     and exists (
       select 1 from public.settings s
        where s.id = 1
