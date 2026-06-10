@@ -51,7 +51,7 @@ export default async function MataMataPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">🗺️ Mata-mata</h1>
+      <h1 className="mb-1 text-2xl font-extrabold text-white">Mata-mata</h1>
       <p className="mb-4 text-sm text-white/50">
         Escolha quem avança. Vale quem passar (inclui prorrogação/pênaltis).
       </p>
@@ -59,7 +59,7 @@ export default async function MataMataPage() {
       {!anyMatches && (
         <p className="card p-6 text-center text-white/50">
           Os confrontos do mata-mata aparecem aqui quando a fase de grupos
-          terminar e a sincronização trouxer o chaveamento. ⏳
+          terminar e a sincronização trouxer o chaveamento.
         </p>
       )}
 

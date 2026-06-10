@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { Check } from "lucide-react";
 import { setPaid, setActive } from "@/lib/actions/admin";
 import type { Profile } from "@/lib/types";
 
@@ -25,7 +26,7 @@ export function ParticipantRow({ p }: { p: Profile }) {
         <p className="truncate font-semibold text-white">
           {p.full_name ?? "Sem nome"}
           {p.role === "admin" && (
-            <span className="ml-2 rounded bg-copa-blue/30 px-1.5 py-0.5 text-[10px] font-bold text-blue-200">
+            <span className="ml-2 rounded-full bg-copa-blue/20 px-2 py-0.5 text-[10px] font-bold text-blue-300">
               ADMIN
             </span>
           )}
@@ -36,20 +37,21 @@ export function ParticipantRow({ p }: { p: Profile }) {
       <button
         onClick={() => startTransition(() => void setPaid(p.id, !p.is_paid))}
         disabled={pending}
-        className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold ${
+        className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-semibold ${
           p.is_paid
-            ? "bg-emerald-500/20 text-emerald-200"
-            : "bg-amber-500/20 text-amber-200"
+            ? "bg-emerald-400/15 text-emerald-400"
+            : "bg-amber-400/15 text-amber-400"
         }`}
       >
-        {p.is_paid ? "✓ Pago" : "Pendente"}
+        {p.is_paid && <Check size={12} />}
+        {p.is_paid ? "Pago" : "Pendente"}
       </button>
 
       {p.role !== "admin" && (
         <button
           onClick={() => startTransition(() => void setActive(p.id, !p.is_active))}
           disabled={pending}
-          className="rounded-lg bg-white/5 px-2.5 py-1.5 text-xs text-white/60 hover:bg-white/10"
+          className="rounded-full bg-white/5 px-3 py-1.5 text-xs text-white/60 hover:bg-white/10"
         >
           {p.is_active ? "Remover" : "Reativar"}
         </button>

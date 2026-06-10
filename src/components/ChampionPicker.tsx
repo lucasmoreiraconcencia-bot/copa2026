@@ -30,7 +30,7 @@ export function ChampionPicker({
     }
     startTransition(async () => {
       const r = await saveChampionPrediction(teamId);
-      setMsg(r.ok ? { ok: true, text: "Palpite salvo! 👑" } : { text: r.error ?? "Erro" });
+      setMsg(r.ok ? { ok: true, text: "Palpite salvo!" } : { text: r.error ?? "Erro" });
     });
   }
 

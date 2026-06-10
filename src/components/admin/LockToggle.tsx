@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { Lock, LockOpen } from "lucide-react";
 import { lockGroup, lockRound } from "@/lib/actions/admin";
 import type { RoundCode } from "@/lib/types";
 
@@ -28,14 +29,17 @@ export function LockToggle({
     <button
       onClick={toggle}
       disabled={pending}
-      className={`flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition ${
+      className={`flex items-center justify-between rounded-full px-3.5 py-2 text-sm transition ${
         locked
-          ? "border-red-400/30 bg-red-500/10 text-red-200"
-          : "border-emerald-400/30 bg-emerald-500/10 text-emerald-200"
+          ? "bg-red-400/15 text-red-400"
+          : "bg-emerald-400/15 text-emerald-400"
       }`}
     >
       <span>{label}</span>
-      <span className="font-semibold">{locked ? "🔒 Fechado" : "🔓 Aberto"}</span>
+      <span className="flex items-center gap-1 font-semibold">
+        {locked ? <Lock size={13} /> : <LockOpen size={13} />}
+        {locked ? "Fechado" : "Aberto"}
+      </span>
     </button>
   );
 }

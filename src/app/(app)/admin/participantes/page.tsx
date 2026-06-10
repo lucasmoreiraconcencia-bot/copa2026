@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { getProfiles } from "@/lib/data";
 import { ParticipantRow } from "@/components/admin/ParticipantRow";
 import { InviteLink } from "@/components/admin/InviteLink";
@@ -11,11 +12,15 @@ export default async function ParticipantesPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        <Link href="/admin" className="text-white/50 hover:text-white">
-          ‹ Admin
+        <Link
+          href="/admin"
+          className="inline-flex items-center gap-1 text-sm text-white/50 hover:text-white"
+        >
+          <ArrowLeft size={15} />
+          Admin
         </Link>
       </div>
-      <h1 className="text-2xl font-extrabold text-white">👥 Participantes</h1>
+      <h1 className="text-2xl font-extrabold text-white">Participantes</h1>
 
       <InviteLink />
 

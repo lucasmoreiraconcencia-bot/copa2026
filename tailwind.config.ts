@@ -21,10 +21,6 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "Georgia", "serif"],
-      },
-      boxShadow: {
-        card: "0 4px 24px -8px rgba(7, 82, 53, 0.25)",
       },
     },
   },

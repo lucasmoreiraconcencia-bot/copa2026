@@ -16,7 +16,8 @@ export interface RankTab {
   rows: RankRow[];
 }
 
-const MEDAL = ["🥇", "🥈", "🥉"];
+// cores de pódio para os 3 primeiros
+const PODIUM = ["text-copa-gold", "text-zinc-300", "text-amber-600"];
 
 export function RankingTabs({ tabs }: { tabs: RankTab[] }) {
   const [active, setActive] = useState(tabs[0]?.key ?? "geral");
@@ -24,7 +25,7 @@ export function RankingTabs({ tabs }: { tabs: RankTab[] }) {
 
   return (
     <div>
-      <div className="mb-4 flex gap-2 overflow-x-auto pb-1">
+      <div className="no-scrollbar mb-4 flex gap-2 overflow-x-auto pb-1">
         {tabs.map((t) => (
           <button
             key={t.key}
@@ -49,7 +50,7 @@ function RankList({ rows }: { rows: RankRow[] }) {
   if (rows.length === 0) {
     return (
       <p className="card p-6 text-center text-white/50">
-        Sem pontos por aqui ainda. Volte quando os jogos começarem. ⚽
+        Sem pontos por aqui ainda. Volte quando os jogos começarem.
       </p>
     );
   }
@@ -64,7 +65,7 @@ function RankList({ rows }: { rows: RankRow[] }) {
         const rank = lastPoints === r.points ? lastRank : i + 1;
         lastPoints = r.points;
         lastRank = rank;
-        const medal = rank <= 3 ? MEDAL[rank - 1] : null;
+        const podium = rank <= 3 ? PODIUM[rank - 1] : "text-white/50";
 
         return (
           <li
@@ -73,8 +74,8 @@ function RankList({ rows }: { rows: RankRow[] }) {
               rank === 1 ? "ring-1 ring-copa-gold/50" : ""
             }`}
           >
-            <span className="w-8 text-center text-lg font-bold text-white/70">
-              {medal ?? rank}
+            <span className={`w-8 text-center text-base font-extrabold ${podium}`}>
+              {rank}
             </span>
             {r.avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -91,7 +92,9 @@ function RankList({ rows }: { rows: RankRow[] }) {
             <div className="min-w-0 flex-1">
               <p className="truncate font-semibold text-white">{r.name}</p>
               {r.isPaid === false && (
-                <span className="text-xs text-amber-300/80">pagamento pendente</span>
+                <span className="badge bg-amber-400/15 text-amber-400">
+                  pagamento pendente
+                </span>
               )}
             </div>
             <span className="text-lg font-extrabold text-copa-gold">

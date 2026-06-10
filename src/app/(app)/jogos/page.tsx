@@ -29,12 +29,12 @@ export default async function JogosPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">⚽ Jogos e resultados</h1>
+      <h1 className="mb-1 text-2xl font-extrabold text-white">Jogos e resultados</h1>
       <p className="mb-4 text-sm text-white/50">Atualizado automaticamente pela API.</p>
 
       {!hasData && (
         <p className="card p-6 text-center text-white/50">
-          Ainda não há dados. O administrador precisa rodar a sincronização. ⏳
+          Ainda não há dados. O administrador precisa rodar a sincronização.
         </p>
       )}
 

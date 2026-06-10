@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Users, Pencil } from "lucide-react";
 import { getGroups, getRoundLocks, getProfiles } from "@/lib/data";
 import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { ROUND_LABELS } from "@/lib/scoring";
@@ -19,7 +20,7 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-extrabold text-white">⚙️ Administração</h1>
+      <h1 className="text-2xl font-extrabold text-white">Administração</h1>
 
       <div className="grid grid-cols-3 gap-3">
         <Stat label="Participantes" value={active.length} />
@@ -31,12 +32,18 @@ export default async function AdminPage() {
 
       <div className="grid gap-3 sm:grid-cols-2">
         <Link href="/admin/participantes" className="card p-4 hover:bg-white/10">
-          <h2 className="font-bold text-white">👥 Participantes</h2>
-          <p className="text-sm text-white/60">Pagamento, convites e remoção.</p>
+          <h2 className="flex items-center gap-2 font-bold text-white">
+            <Users size={18} strokeWidth={1.8} className="text-copa-gold" />
+            Participantes
+          </h2>
+          <p className="mt-1 text-sm text-white/60">Pagamento, convites e remoção.</p>
         </Link>
         <Link href="/admin/resultados" className="card p-4 hover:bg-white/10">
-          <h2 className="font-bold text-white">✏️ Corrigir resultados</h2>
-          <p className="text-sm text-white/60">Ajuste manual (fallback da API).</p>
+          <h2 className="flex items-center gap-2 font-bold text-white">
+            <Pencil size={18} strokeWidth={1.8} className="text-copa-gold" />
+            Corrigir resultados
+          </h2>
+          <p className="mt-1 text-sm text-white/60">Ajuste manual (fallback da API).</p>
         </Link>
       </div>
 

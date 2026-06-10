@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import {
   getMatches,
   getTeams,
@@ -39,11 +40,15 @@ export default async function ResultadosPage() {
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-2">
-        <Link href="/admin" className="text-white/50 hover:text-white">
-          ‹ Admin
+        <Link
+          href="/admin"
+          className="inline-flex items-center gap-1 text-sm text-white/50 hover:text-white"
+        >
+          <ArrowLeft size={15} />
+          Admin
         </Link>
       </div>
-      <h1 className="text-2xl font-extrabold text-white">✏️ Corrigir resultados</h1>
+      <h1 className="text-2xl font-extrabold text-white">Corrigir resultados</h1>
       <p className="text-sm text-white/50">
         Use só quando a API atrasar ou errar. Ao salvar, os pontos são recalculados.
       </p>

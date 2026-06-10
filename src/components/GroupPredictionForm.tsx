@@ -46,7 +46,7 @@ export function GroupPredictionForm({
         groupLetter,
         order as [string, string, string, string],
       );
-      setMsg(r.ok ? { ok: true, text: "Salvo! ✅" } : { text: r.error ?? "Erro" });
+      setMsg(r.ok ? { ok: true, text: "Salvo!" } : { text: r.error ?? "Erro" });
     });
   }
 

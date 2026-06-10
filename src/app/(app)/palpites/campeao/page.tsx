@@ -34,7 +34,7 @@ export default async function CampeaoPage() {
   return (
     <div>
       <h1 className="mb-1 text-2xl font-extrabold text-white">
-        👑 Palpite de Campeão
+        Palpite de Campeão
       </h1>
       <p className="mb-4 text-sm text-white/50">
         Acertar o campeão da Copa vale <b className="text-copa-gold">{CHAMPION_POINTS} pontos</b>.
@@ -44,7 +44,7 @@ export default async function CampeaoPage() {
       {teams.length === 0 ? (
         <p className="card p-6 text-center text-white/50">
           As seleções ainda não foram sincronizadas. Peça ao administrador para
-          rodar a sincronização. ⏳
+          rodar a sincronização.
         </p>
       ) : !locked ? (
         <ChampionPicker teams={teams} initialTeamId={mine?.team_id ?? null} />

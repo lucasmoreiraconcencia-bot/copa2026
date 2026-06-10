@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { RefreshCw, Calculator } from "lucide-react";
 import { runSync, runScore } from "@/lib/actions/admin";
 
 export function AdminTools() {
@@ -24,10 +25,12 @@ export function AdminTools() {
       <h2 className="mb-2 font-bold text-white">Sincronização</h2>
       <div className="flex flex-wrap gap-2">
         <button onClick={() => call(runSync)} disabled={pending} className="btn-primary">
-          {pending ? "Processando…" : "🔄 Sincronizar com a API"}
+          <RefreshCw size={16} className={pending ? "animate-spin" : ""} />
+          {pending ? "Processando…" : "Sincronizar com a API"}
         </button>
         <button onClick={() => call(runScore)} disabled={pending} className="btn-ghost">
-          🧮 Recalcular pontos
+          <Calculator size={16} />
+          Recalcular pontos
         </button>
       </div>
       {msg && (

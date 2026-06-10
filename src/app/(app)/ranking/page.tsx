@@ -54,8 +54,8 @@ export default async function RankingPage() {
       </p>
 
       {leaderTie && (
-        <p className="mb-4 rounded-xl border border-copa-gold/30 bg-copa-gold/10 px-3 py-2 text-sm text-copa-gold">
-          🤝 Empate na liderança — em caso de empate ao final da Copa, o prêmio é
+        <p className="mb-4 rounded-xl bg-copa-gold/10 px-3 py-2 text-sm text-copa-gold">
+          Empate na liderança — em caso de empate ao final da Copa, o prêmio é
           dividido igualmente.
         </p>
       )}
