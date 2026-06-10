@@ -1,0 +1,34 @@
+import Link from "next/link";
+import { getProfiles } from "@/lib/data";
+import { ParticipantRow } from "@/components/admin/ParticipantRow";
+import { InviteLink } from "@/components/admin/InviteLink";
+
+export const dynamic = "force-dynamic";
+
+export default async function ParticipantesPage() {
+  const profiles = await getProfiles();
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Link href="/admin" className="text-white/50 hover:text-white">
+          ‹ Admin
+        </Link>
+      </div>
+      <h1 className="text-2xl font-extrabold text-white">👥 Participantes</h1>
+
+      <InviteLink />
+
+      <div className="space-y-2">
+        {profiles.map((p) => (
+          <ParticipantRow key={p.id} p={p} />
+        ))}
+        {profiles.length === 0 && (
+          <p className="card p-6 text-center text-white/50">
+            Ninguém entrou ainda. Compartilhe o link de convite.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
