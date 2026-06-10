@@ -1,6 +1,7 @@
 import { getRankingTotals, getRoundPoints } from "@/lib/data";
 import { ROUND_LABELS, ROUND_ORDER } from "@/lib/scoring";
 import { RankingTabs, type RankTab, type RankRow } from "@/components/RankingTabs";
+import { PageHeader } from "@/components/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -48,10 +49,10 @@ export default async function RankingPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">Classificação</h1>
-      <p className="mb-4 text-sm text-white/50">
-        Quem somar mais pontos até a final leva o prêmio.
-      </p>
+      <PageHeader
+        title="Classificação"
+        subtitle="Quem somar mais pontos até a final leva o prêmio."
+      />
 
       {leaderTie && (
         <p className="mb-4 rounded-xl bg-copa-gold/10 px-3 py-2 text-sm text-copa-gold">

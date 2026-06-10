@@ -44,13 +44,15 @@ export function MatchPredictionForm({
               disabled={pending}
               className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-sm font-semibold transition ${
                 selected
-                  ? "border-copa-gold bg-copa-gold/20 text-white"
+                  ? "border-copa-gold bg-copa-gold/15 text-white shadow-glow"
                   : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
               }`}
             >
               {t.flag_url && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={t.flag_url} alt="" className="h-4 w-6 rounded-sm object-cover" />
+                <span className="crest h-6 w-6">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={t.flag_url} alt="" className="h-full w-full object-contain" />
+                </span>
               )}
               {t.name}
             </button>

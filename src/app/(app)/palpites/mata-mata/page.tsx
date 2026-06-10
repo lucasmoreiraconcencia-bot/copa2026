@@ -10,6 +10,7 @@ import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { ROUND_LABELS, ROUND_POINTS } from "@/lib/scoring";
 import { MatchPredictionForm } from "@/components/MatchPredictionForm";
 import { TeamPill } from "@/components/TeamPill";
+import { PageHeader } from "@/components/PageHeader";
 import type { RoundCode, Team, Match } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -51,10 +52,10 @@ export default async function MataMataPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">Mata-mata</h1>
-      <p className="mb-4 text-sm text-white/50">
-        Escolha quem avança. Vale quem passar (inclui prorrogação/pênaltis).
-      </p>
+      <PageHeader
+        title="Mata-mata"
+        subtitle="Escolha quem avança. Vale quem passar (inclui prorrogação/pênaltis)."
+      />
 
       {!anyMatches && (
         <p className="card p-6 text-center text-white/50">

@@ -10,6 +10,7 @@ import {
 import { ROUND_LABELS } from "@/lib/scoring";
 import { MatchWinnerRow } from "@/components/admin/MatchWinnerRow";
 import { StandingEditor } from "@/components/admin/StandingEditor";
+import { PageHeader } from "@/components/PageHeader";
 import type { RoundCode, Match } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -48,10 +49,10 @@ export default async function ResultadosPage() {
           Admin
         </Link>
       </div>
-      <h1 className="text-2xl font-extrabold text-white">Corrigir resultados</h1>
-      <p className="text-sm text-white/50">
-        Use só quando a API atrasar ou errar. Ao salvar, os pontos são recalculados.
-      </p>
+      <PageHeader
+        title="Corrigir resultados"
+        subtitle="Use só quando a API atrasar ou errar. Ao salvar, os pontos são recalculados."
+      />
 
       {/* Classificação dos grupos */}
       <section>

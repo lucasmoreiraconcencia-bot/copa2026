@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Crown, ListOrdered, GitFork, ChevronRight } from "lucide-react";
 import { getSettings, getGroups, getRoundLocks } from "@/lib/data";
 import { isLocked, formatDeadline } from "@/lib/deadlines";
+import { PageHeader } from "@/components/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -48,16 +49,16 @@ export default async function PalpitesHub() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">Seus palpites</h1>
-      <p className="mb-4 text-sm text-white/50">
-        Palpite não enviado a tempo = 0 ponto.
-      </p>
+      <PageHeader
+        title="Seus palpites"
+        subtitle="Palpite não enviado a tempo = 0 ponto."
+      />
 
       <div className="space-y-3">
         {cards.map(({ Icon, ...c }) => (
-          <Link key={c.href} href={c.href} className="card block p-4 hover:bg-white/10">
+          <Link key={c.href} href={c.href} className="card-accent block p-4 hover:bg-white/10">
             <div className="flex items-center gap-3">
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white/5">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-copa-gold/20 to-copa-blue/15">
                 <Icon size={22} strokeWidth={1.8} className="text-copa-gold" />
               </div>
               <div className="min-w-0 flex-1">

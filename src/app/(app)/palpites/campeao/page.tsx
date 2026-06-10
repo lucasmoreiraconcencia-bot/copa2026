@@ -10,6 +10,7 @@ import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { CHAMPION_POINTS } from "@/lib/scoring";
 import { ChampionPicker } from "@/components/ChampionPicker";
 import { TeamPill } from "@/components/TeamPill";
+import { PageHeader } from "@/components/PageHeader";
 import type { Team } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -33,13 +34,10 @@ export default async function CampeaoPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">
-        Palpite de Campeão
-      </h1>
-      <p className="mb-4 text-sm text-white/50">
-        Acertar o campeão da Copa vale <b className="text-copa-gold">{CHAMPION_POINTS} pontos</b>.
-        Prazo: {formatDeadline(settings?.champion_deadline ?? null)}.
-      </p>
+      <PageHeader
+        title="Palpite de Campeão"
+        subtitle={`Acertar o campeão da Copa vale ${CHAMPION_POINTS} pontos. Prazo: ${formatDeadline(settings?.champion_deadline ?? null)}.`}
+      />
 
       {teams.length === 0 ? (
         <p className="card p-6 text-center text-white/50">

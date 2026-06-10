@@ -5,6 +5,7 @@ import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { ROUND_LABELS } from "@/lib/scoring";
 import { AdminTools } from "@/components/admin/AdminTools";
 import { LockToggle } from "@/components/admin/LockToggle";
+import { PageHeader } from "@/components/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-5">
-      <h1 className="text-2xl font-extrabold text-white">Administração</h1>
+      <PageHeader title="Administração" />
 
       <div className="grid grid-cols-3 gap-3">
         <Stat label="Participantes" value={active.length} />
@@ -87,8 +88,8 @@ export default async function AdminPage() {
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div className="card p-3 text-center">
-      <div className="text-2xl font-extrabold text-copa-gold">{value}</div>
+    <div className="card-accent p-3 text-center">
+      <div className="font-display text-3xl font-extrabold text-copa-gold">{value}</div>
       <div className="text-xs text-white/50">{label}</div>
     </div>
   );

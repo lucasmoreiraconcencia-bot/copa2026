@@ -7,20 +7,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Paleta inspirada na Copa do Mundo 2026 (verde-campo, dourado, azul)
+        // Paleta vintage Copa 2002 (Coreia/Japão): navy profundo, dourado, vermelho e azul
         copa: {
+          navy: "#0A1228",
+          navyLight: "#142048",
+          ink: "#070D1E",
+          gold: "#F5C44C",
+          goldLight: "#FFD75E",
+          goldDark: "#D9A520",
+          red: "#E0303B",
+          blue: "#2E6BFF",
+          cyan: "#37C8F0",
+          cream: "#F5F2E8",
           green: "#0B7A4B",
           greenDark: "#075235",
-          gold: "#F2C14E",
-          goldDark: "#D9A520",
-          blue: "#1D63ED",
-          blueDark: "#0E3FA8",
-          ink: "#0A1F17",
-          cream: "#F7F5EF",
         },
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Arial Narrow", "sans-serif"],
+      },
+      boxShadow: {
+        glow: "0 0 32px -8px rgba(245, 196, 76, 0.45)",
+        card: "0 8px 32px -12px rgba(0, 0, 0, 0.55)",
       },
     },
   },

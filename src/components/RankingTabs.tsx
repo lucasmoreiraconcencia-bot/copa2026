@@ -30,9 +30,9 @@ export function RankingTabs({ tabs }: { tabs: RankTab[] }) {
           <button
             key={t.key}
             onClick={() => setActive(t.key)}
-            className={`whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-semibold transition ${
+            className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${
               active === t.key
-                ? "bg-copa-gold text-copa-ink"
+                ? "bg-copa-gold text-copa-ink shadow-glow"
                 : "bg-white/5 text-white/60 hover:bg-white/10"
             }`}
           >
@@ -46,6 +46,18 @@ export function RankingTabs({ tabs }: { tabs: RankTab[] }) {
   );
 }
 
+function computeRanks(rows: RankRow[]): number[] {
+  // ranking de competição (empate compartilha posição: 1,2,2,4...)
+  let lastPoints: number | null = null;
+  let lastRank = 0;
+  return rows.map((r, i) => {
+    const rank = lastPoints === r.points ? lastRank : i + 1;
+    lastPoints = r.points;
+    lastRank = rank;
+    return rank;
+  });
+}
+
 function RankList({ rows }: { rows: RankRow[] }) {
   if (rows.length === 0) {
     return (
@@ -55,55 +67,103 @@ function RankList({ rows }: { rows: RankRow[] }) {
     );
   }
 
-  // Ranking de competição (empate compartilha posição: 1,2,2,4...)
-  let lastPoints: number | null = null;
-  let lastRank = 0;
+  const ranks = computeRanks(rows);
+  const hasPodium = rows.length >= 3;
+  const podiumRows = hasPodium ? rows.slice(0, 3) : [];
+  const listRows = hasPodium ? rows.slice(3) : rows;
+  const listRanks = hasPodium ? ranks.slice(3) : ranks;
 
   return (
-    <ol className="space-y-2">
-      {rows.map((r, i) => {
-        const rank = lastPoints === r.points ? lastRank : i + 1;
-        lastPoints = r.points;
-        lastRank = rank;
-        const podium = rank <= 3 ? PODIUM[rank - 1] : "text-white/50";
+    <div>
+      {/* pódio: 2º — 1º — 3º */}
+      {hasPodium && (
+        <div className="mb-4 grid grid-cols-3 items-end gap-2">
+          <PodiumCard row={podiumRows[1]} rank={ranks[1]} place={2} />
+          <PodiumCard row={podiumRows[0]} rank={ranks[0]} place={1} />
+          <PodiumCard row={podiumRows[2]} rank={ranks[2]} place={3} />
+        </div>
+      )}
 
-        return (
-          <li
-            key={r.userId}
-            className={`card flex items-center gap-3 p-3 ${
-              rank === 1 ? "ring-1 ring-copa-gold/50" : ""
-            }`}
-          >
-            <span className={`w-8 text-center text-base font-extrabold ${podium}`}>
-              {rank}
-            </span>
-            {r.avatar ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={r.avatar}
-                alt={r.name}
-                className="h-9 w-9 rounded-full border border-white/15"
-              />
-            ) : (
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-copa-green font-bold">
-                {r.name.charAt(0)}
+      <ol className="space-y-2">
+        {listRows.map((r, i) => {
+          const rank = listRanks[i];
+          const podium = rank <= 3 ? PODIUM[rank - 1] : "text-white/50";
+          return (
+            <li key={r.userId} className="card flex items-center gap-3 p-3">
+              <span className={`w-8 text-center font-display text-lg font-extrabold ${podium}`}>
+                {rank}
+              </span>
+              <Avatar row={r} className="h-9 w-9" />
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-semibold text-white">{r.name}</p>
+                {r.isPaid === false && (
+                  <span className="badge bg-amber-400/15 text-amber-400">
+                    pagamento pendente
+                  </span>
+                )}
               </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="truncate font-semibold text-white">{r.name}</p>
-              {r.isPaid === false && (
-                <span className="badge bg-amber-400/15 text-amber-400">
-                  pagamento pendente
+              <span className="font-display text-xl font-extrabold text-copa-gold">
+                {r.points}
+                <span className="ml-1 font-sans text-xs font-medium text-white/40">
+                  pts
                 </span>
-              )}
-            </div>
-            <span className="text-lg font-extrabold text-copa-gold">
-              {r.points}
-              <span className="ml-1 text-xs font-medium text-white/40">pts</span>
-            </span>
-          </li>
-        );
-      })}
-    </ol>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
+}
+
+function PodiumCard({
+  row,
+  rank,
+  place,
+}: {
+  row: RankRow;
+  rank: number;
+  place: 1 | 2 | 3;
+}) {
+  const ring =
+    place === 1
+      ? "ring-2 ring-copa-gold shadow-glow"
+      : place === 2
+        ? "ring-1 ring-zinc-300/60"
+        : "ring-1 ring-amber-600/60";
+  const height = place === 1 ? "pt-5" : "pt-3";
+  return (
+    <div className={`card-accent flex flex-col items-center gap-1.5 p-3 text-center ${height}`}>
+      <Avatar row={row} className={`${place === 1 ? "h-16 w-16" : "h-12 w-12"} ${ring}`} />
+      <p className="w-full truncate text-sm font-semibold text-white">{row.name}</p>
+      <p className={`font-display text-lg font-extrabold leading-none ${PODIUM[place - 1]}`}>
+        {row.points}
+        <span className="ml-0.5 font-sans text-[10px] font-medium text-white/40">pts</span>
+      </p>
+      <span className="badge bg-white/10 text-white/60">{rank}º lugar</span>
+      {row.isPaid === false && (
+        <span className="badge bg-amber-400/15 text-amber-400">pendente</span>
+      )}
+    </div>
+  );
+}
+
+function Avatar({ row, className }: { row: RankRow; className?: string }) {
+  if (row.avatar) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={row.avatar}
+        alt={row.name}
+        className={`rounded-full border border-white/15 object-cover ${className}`}
+      />
+    );
+  }
+  return (
+    <div
+      className={`grid place-items-center rounded-full bg-copa-blue font-bold ${className}`}
+    >
+      {row.name.charAt(0)}
+    </div>
   );
 }

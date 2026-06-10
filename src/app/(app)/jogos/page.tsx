@@ -2,6 +2,7 @@ import { getMatches, getTeams, getStandings, getGroups } from "@/lib/data";
 import { ROUND_LABELS } from "@/lib/scoring";
 import { formatDeadline } from "@/lib/deadlines";
 import { TeamPill } from "@/components/TeamPill";
+import { PageHeader } from "@/components/PageHeader";
 import type { RoundCode, Match } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -29,8 +30,10 @@ export default async function JogosPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">Jogos e resultados</h1>
-      <p className="mb-4 text-sm text-white/50">Atualizado automaticamente pela API.</p>
+      <PageHeader
+        title="Jogos e resultados"
+        subtitle="Atualizado automaticamente pela API."
+      />
 
       {!hasData && (
         <p className="card p-6 text-center text-white/50">
@@ -87,7 +90,7 @@ export default async function JogosPage() {
                         {formatDeadline(m.kickoff)}
                       </span>
                     ) : (
-                      <span className="font-bold text-white">
+                      <span className="inline-block rounded-full bg-white/10 px-3 py-1 font-display text-base font-extrabold text-white">
                         {m.home_score ?? 0} <span className="text-white/40">×</span>{" "}
                         {m.away_score ?? 0}
                       </span>

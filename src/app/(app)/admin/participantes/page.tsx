@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { getProfiles } from "@/lib/data";
 import { ParticipantRow } from "@/components/admin/ParticipantRow";
 import { InviteLink } from "@/components/admin/InviteLink";
+import { PageHeader } from "@/components/PageHeader";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +21,7 @@ export default async function ParticipantesPage() {
           Admin
         </Link>
       </div>
-      <h1 className="text-2xl font-extrabold text-white">Participantes</h1>
+      <PageHeader title="Participantes" />
 
       <InviteLink />
 

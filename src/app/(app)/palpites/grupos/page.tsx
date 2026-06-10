@@ -9,6 +9,7 @@ import {
 import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { TeamPill } from "@/components/TeamPill";
 import { GroupPredictionForm } from "@/components/GroupPredictionForm";
+import { PageHeader } from "@/components/PageHeader";
 import type { Team, PredictionGroup, GroupStanding } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -34,10 +35,10 @@ export default async function GruposPage() {
 
   return (
     <div>
-      <h1 className="mb-1 text-2xl font-extrabold text-white">Fase de Grupos</h1>
-      <p className="mb-4 text-sm text-white/50">
-        Ordene 1º a 4º de cada grupo. Pontos: 1º=5, 2º=3, 3º=2, 4º=0.
-      </p>
+      <PageHeader
+        title="Fase de Grupos"
+        subtitle="Ordene 1º a 4º de cada grupo. Pontos: 1º=5, 2º=3, 3º=2, 4º=0."
+      />
 
       <div className="space-y-4">
         {groups.map((g) => {

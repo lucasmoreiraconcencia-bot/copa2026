@@ -12,18 +12,19 @@ export default async function LoginPage({
 
   return (
     <main className="min-h-dvh flex flex-col items-center justify-center px-6 text-center">
-      <div className="card w-full max-w-md p-8">
+      <div className="card-accent w-full max-w-md p-8 backdrop-blur-md">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo-26.png"
           alt="FIFA World Cup 2026"
-          className="mx-auto mb-6 h-44 w-auto"
+          className="mx-auto mb-6 h-44 w-auto drop-shadow-[0_8px_24px_rgba(245,196,76,0.25)]"
         />
 
-        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+        <h1 className="font-display text-4xl font-extrabold uppercase italic tracking-wide text-white">
           Bolão Copa 2026
         </h1>
-        <p className="mt-1 text-xs font-medium uppercase tracking-[0.25em] text-white/40">
+        <div className="ribbon mx-auto mt-2" />
+        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.3em] text-white/45">
           Canadá · Estados Unidos · México
         </p>
 
