@@ -19,6 +19,7 @@ export function GroupPredictionForm({
   const [order, setOrder] = useState<string[]>(
     initial ? [...initial] : ["", "", "", ""],
   );
+  const [saved, setSaved] = useState(initial != null);
   const [msg, setMsg] = useState<{ ok?: boolean; text: string } | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -46,7 +47,8 @@ export function GroupPredictionForm({
         groupLetter,
         order as [string, string, string, string],
       );
-      setMsg(r.ok ? { ok: true, text: "Salvo!" } : { text: r.error ?? "Erro" });
+      if (r.ok) setSaved(true);
+      setMsg(r.ok ? { ok: true, text: "✓ Palpite salvo!" } : { text: r.error ?? "Erro" });
     });
   }
 
@@ -84,6 +86,11 @@ export function GroupPredictionForm({
       {msg && (
         <p className={`mt-2 text-sm ${msg.ok ? "text-emerald-300" : "text-red-300"}`}>
           {msg.text}
+        </p>
+      )}
+      {!msg && saved && (
+        <p className="mt-2 text-xs text-emerald-300/80">
+          ✓ Palpite salvo — você pode alterar até o grupo fechar.
         </p>
       )}
     </div>

@@ -16,6 +16,7 @@ export function MatchPredictionForm({
   initialPick: string | null;
 }) {
   const [pick, setPick] = useState<string | null>(initialPick);
+  const [savedPick, setSavedPick] = useState<string | null>(initialPick);
   const [msg, setMsg] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -28,6 +29,8 @@ export function MatchPredictionForm({
       if (!r.ok) {
         setPick(prev);
         setMsg(r.error ?? "Erro");
+      } else {
+        setSavedPick(teamId);
       }
     });
   }
@@ -60,6 +63,11 @@ export function MatchPredictionForm({
         })}
       </div>
       {msg && <p className="mt-1 text-xs text-red-300">{msg}</p>}
+      {!msg && savedPick && (
+        <p className="mt-1.5 text-xs text-emerald-300/80">
+          ✓ Palpite salvo — você pode alterar até a rodada fechar.
+        </p>
+      )}
     </div>
   );
 }

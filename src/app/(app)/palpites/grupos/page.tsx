@@ -59,9 +59,16 @@ export default async function GruposPage() {
             <section key={g.letter} className="card p-4">
               <div className="mb-3 flex items-center justify-between">
                 <h2 className="text-lg font-bold text-white">Grupo {g.letter}</h2>
-                <span className={locked ? "badge-closed" : "badge-open"}>
-                  {locked ? "Fechado" : `Fecha ${formatDeadline(g.deadline)}`}
-                </span>
+                <div className="flex items-center gap-1.5">
+                  {!locked && initial && (
+                    <span className="badge bg-emerald-400/15 text-emerald-300">
+                      ✓ salvo
+                    </span>
+                  )}
+                  <span className={locked ? "badge-closed" : "badge-open"}>
+                    {locked ? "Fechado" : `Fecha ${formatDeadline(g.deadline)}`}
+                  </span>
+                </div>
               </div>
 
               {!locked && teams.length >= 4 && user.is_paid && (

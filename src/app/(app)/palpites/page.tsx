@@ -1,7 +1,23 @@
 import Link from "next/link";
-import { Crown, ListOrdered, GitFork, ChevronRight } from "lucide-react";
+import {
+  Crown,
+  ListOrdered,
+  GitFork,
+  ChevronRight,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { requireUser } from "@/lib/auth";
-import { getSettings, getGroups, getRoundLocks } from "@/lib/data";
+import {
+  getSettings,
+  getGroups,
+  getRoundLocks,
+  getTeams,
+  getMatches,
+  getMyChampion,
+  getMyGroupPreds,
+  getMyMatchPreds,
+} from "@/lib/data";
 import { isLocked, formatDeadline } from "@/lib/deadlines";
 import { PageHeader } from "@/components/PageHeader";
 import { PaymentNotice } from "@/components/PaymentNotice";
@@ -10,17 +26,58 @@ export const dynamic = "force-dynamic";
 
 export default async function PalpitesHub() {
   const user = await requireUser();
-  const [settings, groups, locks] = await Promise.all([
+  const [
+    settings,
+    groups,
+    locks,
+    teams,
+    matches,
+    myChampion,
+    myGroupPreds,
+    myMatchPreds,
+  ] = await Promise.all([
     getSettings(),
     getGroups(),
     getRoundLocks(),
+    getTeams(),
+    getMatches(),
+    getMyChampion(user.id),
+    getMyGroupPreds(user.id),
+    getMyMatchPreds(user.id),
   ]);
 
   const championOpen = !isLocked(settings?.champion_deadline ?? null, false);
   const groupsOpen = groups.filter((g) => !isLocked(g.deadline, g.is_locked)).length;
   const roundsOpen = locks.filter((l) => !isLocked(l.deadline, l.is_locked)).length;
 
-  const cards = [
+  // Progresso dos palpites do usuário
+  const championTeam = myChampion
+    ? teams.find((t) => t.id === myChampion.team_id)
+    : null;
+  const groupsTotal = groups.length || 12;
+  const groupsDone = myGroupPreds.length;
+  const koMatches = matches.filter(
+    (m) => m.round !== "group" && m.home_team_id && m.away_team_id,
+  );
+  const koDone = myMatchPreds.filter((p) =>
+    koMatches.some((m) => m.id === p.match_id),
+  ).length;
+
+  interface Progress {
+    done: boolean;
+    text: string;
+  }
+
+  const cards: {
+    href: string;
+    Icon: typeof Crown;
+    title: string;
+    desc: string;
+    status: string;
+    open: boolean;
+    extra: string;
+    progress: Progress | null;
+  }[] = [
     {
       href: "/palpites/campeao",
       Icon: Crown,
@@ -29,6 +86,9 @@ export default async function PalpitesHub() {
       status: championOpen ? "Aberto" : "Fechado",
       open: championOpen,
       extra: `Prazo: ${formatDeadline(settings?.champion_deadline ?? null)}`,
+      progress: championTeam
+        ? { done: true, text: `Escolhido: ${championTeam.name}` }
+        : { done: false, text: "Você ainda não escolheu" },
     },
     {
       href: "/palpites/grupos",
@@ -38,6 +98,10 @@ export default async function PalpitesHub() {
       status: `${groupsOpen}/${groups.length || 12} abertos`,
       open: groupsOpen > 0,
       extra: "Cada grupo fecha no seu 1º jogo.",
+      progress: {
+        done: groupsTotal > 0 && groupsDone >= groupsTotal,
+        text: `${groupsDone} de ${groupsTotal} grupos palpitados`,
+      },
     },
     {
       href: "/palpites/mata-mata",
@@ -47,6 +111,13 @@ export default async function PalpitesHub() {
       status: `${roundsOpen} rodada(s) aberta(s)`,
       open: roundsOpen > 0,
       extra: "Cada rodada fecha no seu 1º jogo.",
+      progress:
+        koMatches.length > 0
+          ? {
+              done: koDone >= koMatches.length,
+              text: `${koDone} de ${koMatches.length} confrontos palpitados`,
+            }
+          : null,
     },
   ];
 
@@ -74,6 +145,20 @@ export default async function PalpitesHub() {
                   </span>
                 </div>
                 <p className="text-sm text-white/60">{c.desc}</p>
+                {c.progress && (
+                  <p
+                    className={`mt-1.5 flex items-center gap-1 text-xs font-semibold ${
+                      c.progress.done ? "text-emerald-300" : "text-amber-300"
+                    }`}
+                  >
+                    {c.progress.done ? (
+                      <CheckCircle2 size={13} className="shrink-0" />
+                    ) : (
+                      <AlertCircle size={13} className="shrink-0" />
+                    )}
+                    {c.progress.text}
+                  </p>
+                )}
                 <p className="mt-1 text-xs text-white/40">{c.extra}</p>
               </div>
               <ChevronRight size={18} className="shrink-0 text-white/30" />

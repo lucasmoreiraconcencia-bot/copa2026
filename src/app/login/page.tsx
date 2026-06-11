@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getProfile } from "@/lib/auth";
 import { LoginButton } from "@/components/LoginButton";
+import { EmailLoginForm } from "@/components/EmailLoginForm";
 
 export default async function LoginPage({
   searchParams,
@@ -29,7 +30,8 @@ export default async function LoginPage({
         </p>
 
         <p className="mt-5 text-sm text-white/60">
-          Entre com sua conta Google para palpitar e disputar com a galera.
+          Entre com sua conta Google ou com e-mail e senha para palpitar e
+          disputar com a galera.
         </p>
 
         {searchParams.removido && (
@@ -46,6 +48,14 @@ export default async function LoginPage({
         <div className="mt-6">
           <LoginButton />
         </div>
+
+        <div className="my-5 flex items-center gap-3">
+          <div className="h-px flex-1 bg-white/10" />
+          <span className="text-xs uppercase tracking-widest text-white/40">ou</span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+
+        <EmailLoginForm />
 
         <p className="mt-6 text-xs text-white/40">
           Acesso restrito aos participantes convidados.

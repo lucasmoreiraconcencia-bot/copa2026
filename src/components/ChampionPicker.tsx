@@ -12,6 +12,7 @@ export function ChampionPicker({
   initialTeamId: string | null;
 }) {
   const [teamId, setTeamId] = useState(initialTeamId ?? "");
+  const [savedId, setSavedId] = useState(initialTeamId);
   const [msg, setMsg] = useState<{ ok?: boolean; text: string } | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -30,7 +31,8 @@ export function ChampionPicker({
     }
     startTransition(async () => {
       const r = await saveChampionPrediction(teamId);
-      setMsg(r.ok ? { ok: true, text: "Palpite salvo!" } : { text: r.error ?? "Erro" });
+      if (r.ok) setSavedId(teamId);
+      setMsg(r.ok ? { ok: true, text: "✓ Palpite salvo!" } : { text: r.error ?? "Erro" });
     });
   }
 
@@ -65,6 +67,13 @@ export function ChampionPicker({
           className={`mt-3 text-sm ${msg.ok ? "text-emerald-300" : "text-red-300"}`}
         >
           {msg.text}
+        </p>
+      )}
+      {!msg && savedId && (
+        <p className="mt-3 text-sm text-emerald-300/80">
+          ✓ Palpite salvo:{" "}
+          <b>{teams.find((t) => t.id === savedId)?.name ?? "?"}</b> — você pode
+          alterar até o fechamento.
         </p>
       )}
     </div>

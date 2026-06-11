@@ -2,12 +2,19 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Trophy, Target, CalendarDays, Settings } from "lucide-react";
+import {
+  Trophy,
+  Target,
+  CalendarDays,
+  Settings,
+  ClipboardCheck,
+} from "lucide-react";
 import { LogoutButton } from "./LogoutButton";
 
 const LINKS = [
   { href: "/ranking", label: "Ranking", Icon: Trophy },
-  { href: "/palpites", label: "Palpites", Icon: Target },
+  { href: "/palpites", label: "Palpitar", Icon: Target },
+  { href: "/meus-palpites", label: "Meus", Icon: ClipboardCheck },
   { href: "/jogos", label: "Jogos", Icon: CalendarDays },
 ];
 
