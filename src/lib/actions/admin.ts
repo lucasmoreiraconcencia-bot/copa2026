@@ -61,6 +61,17 @@ export async function lockGroup(letter: string, locked: boolean): Promise<Action
   return { ok: true };
 }
 
+/** Trava/destrava manualmente um jogo individual. */
+export async function lockMatch(matchId: string, locked: boolean): Promise<ActionResult> {
+  await requireAdmin();
+  const db = createAdminClient();
+  const { error } = await db.from("matches").update({ is_locked: locked }).eq("id", matchId);
+  if (error) return { error: error.message };
+  revalidateAll();
+  revalidatePath("/palpites/mata-mata");
+  return { ok: true };
+}
+
 /** Corrige manualmente o vencedor (quem avançou) de um jogo e recalcula pontos. */
 export async function overrideMatchWinner(
   matchId: string,

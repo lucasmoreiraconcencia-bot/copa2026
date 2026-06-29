@@ -53,6 +53,7 @@ export interface Match {
   home_score: number | null;
   away_score: number | null;
   winner_team_id: string | null;
+  is_locked: boolean;
   updated_at: string;
 }
 

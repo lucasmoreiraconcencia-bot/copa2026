@@ -110,6 +110,8 @@ export default async function ResultadosPage() {
                       home={m.home_team_id ? teamMap.get(m.home_team_id) ?? null : null}
                       away={m.away_team_id ? teamMap.get(m.away_team_id) ?? null : null}
                       currentWinner={m.winner_team_id}
+                      isLocked={m.is_locked}
+                      kickoff={m.kickoff}
                     />
                   ))}
                 </div>

@@ -102,8 +102,8 @@ export default async function MataMataPage() {
 
               <div className="space-y-2">
                 {ms.map((m) => {
-                  // Cada jogo trava individualmente quando seu kickoff passa
-                  const matchLocked = isLocked(m.kickoff ?? null, roundAdminLocked);
+                  // Cada jogo trava individualmente: kickoff passou, admin travou o jogo, ou admin travou a rodada
+                  const matchLocked = m.is_locked || isLocked(m.kickoff ?? null, roundAdminLocked);
                   const home = m.home_team_id ? teamMap.get(m.home_team_id) : null;
                   const away = m.away_team_id ? teamMap.get(m.away_team_id) : null;
                   const mine = myMap.get(m.id);

@@ -78,13 +78,16 @@ export async function saveMatchPrediction(
   const paymentError = await checkPaid(supabase, user.id);
   if (paymentError) return { error: paymentError };
 
-  // Verifica se este jogo específico já começou
+  // Verifica se este jogo específico já começou ou foi fechado manualmente
   const { data: match } = await supabase
     .from("matches")
-    .select("kickoff, round")
+    .select("kickoff, round, is_locked")
     .eq("id", matchId)
     .single();
 
+  if (match?.is_locked) {
+    return { error: "Palpite fechado pelo administrador." };
+  }
   if (match?.kickoff && new Date(match.kickoff) <= new Date()) {
     return { error: "Palpite fechado — este jogo já começou." };
   }
