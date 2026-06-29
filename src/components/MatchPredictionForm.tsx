@@ -9,11 +9,13 @@ export function MatchPredictionForm({
   home,
   away,
   initialPick,
+  kickoff,
 }: {
   matchId: string;
   home: Team;
   away: Team;
   initialPick: string | null;
+  kickoff?: string | null;
 }) {
   const [pick, setPick] = useState<string | null>(initialPick);
   const [savedPick, setSavedPick] = useState<string | null>(initialPick);
@@ -65,7 +67,18 @@ export function MatchPredictionForm({
       {msg && <p className="mt-1 text-xs text-red-300">{msg}</p>}
       {!msg && savedPick && (
         <p className="mt-1.5 text-xs text-emerald-300/80">
-          ✓ Palpite salvo — você pode alterar até a rodada fechar.
+          ✓ Palpite salvo — você pode alterar até o jogo começar.
+        </p>
+      )}
+      {kickoff && !msg && (
+        <p className="mt-1 text-xs text-white/35">
+          Fecha {new Date(kickoff).toLocaleString("pt-BR", {
+            timeZone: "America/Sao_Paulo",
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
         </p>
       )}
     </div>

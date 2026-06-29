@@ -28,16 +28,22 @@ async function apiGet(path: string): Promise<any> {
 }
 
 function mapStage(stage: string): RoundCode | null {
-  switch (stage) {
-    case "GROUP_STAGE":   return "group";
-    case "ROUND_OF_32":   return "r32";
-    case "ROUND_OF_16":   return "r16";
-    case "QUARTER_FINALS": return "qf";
-    case "SEMI_FINALS":   return "sf";
-    case "THIRD_PLACE":   return "third";
-    case "FINAL":         return "final";
-    default:              return null;
-  }
+  const s = stage.toUpperCase().replace(/[-\s]/g, "_");
+  // Fase de grupos
+  if (s.includes("GROUP")) return "group";
+  // 16 avos / Round of 32
+  if (s === "ROUND_OF_32" || s === "LAST_32" || s === "ROUND_32" || s === "R32") return "r32";
+  // Oitavas / Round of 16
+  if (s === "ROUND_OF_16" || s === "LAST_16" || s === "ROUND_16" || s === "R16") return "r16";
+  // Quartas
+  if (s.includes("QUARTER")) return "qf";
+  // Semis
+  if (s.includes("SEMI")) return "sf";
+  // 3º lugar
+  if (s.includes("THIRD") || s.includes("3RD") || s.includes("PLACE")) return "third";
+  // Final
+  if (s === "FINAL") return "final";
+  return null;
 }
 
 function mapGroupLetter(group: string | null): string | null {

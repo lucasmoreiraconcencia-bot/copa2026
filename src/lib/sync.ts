@@ -60,14 +60,20 @@ export async function syncFromApi(): Promise<SyncResult> {
   }
 
   // ---- Jogos (todas as rodadas reconhecidas) ----
+  // IDs de placeholder que a API usa para times ainda não definidos (TBD)
+  const TBD_IDS = new Set(["0", "", "null", "undefined"]);
+  function realId(id: string): string | null {
+    return TBD_IDS.has(id) ? null : id;
+  }
+
   const matchRows = fixtures
     .filter((f) => f.round !== null)
     .map((f) => ({
       id: f.id,
       round: f.round as RoundCode,
       slot: f.rawRound,
-      home_team_id: f.home.id,
-      away_team_id: f.away.id,
+      home_team_id: realId(f.home.id),
+      away_team_id: realId(f.away.id),
       kickoff: f.kickoff,
       status: f.status,
       home_score: f.homeScore,

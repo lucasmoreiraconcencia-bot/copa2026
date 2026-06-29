@@ -78,6 +78,29 @@ export async function saveMatchPrediction(
   const paymentError = await checkPaid(supabase, user.id);
   if (paymentError) return { error: paymentError };
 
+  // Verifica se este jogo específico já começou
+  const { data: match } = await supabase
+    .from("matches")
+    .select("kickoff, round")
+    .eq("id", matchId)
+    .single();
+
+  if (match?.kickoff && new Date(match.kickoff) <= new Date()) {
+    return { error: "Palpite fechado — este jogo já começou." };
+  }
+
+  // Verifica se o admin travou a rodada inteira manualmente
+  if (match?.round) {
+    const { data: roundLock } = await supabase
+      .from("round_locks")
+      .select("is_locked")
+      .eq("round", match.round)
+      .maybeSingle();
+    if (roundLock?.is_locked) {
+      return { error: "Rodada fechada pelo administrador." };
+    }
+  }
+
   const { error } = await supabase.from("predictions_match").upsert(
     {
       user_id: user.id,
@@ -89,7 +112,7 @@ export async function saveMatchPrediction(
   );
 
   if (error) {
-    return { error: "Palpite fechado ou inválido. Verifique o prazo da rodada." };
+    return { error: "Palpite inválido. Verifique o prazo da rodada." };
   }
   revalidatePath("/palpites/mata-mata");
   revalidatePath("/palpites");

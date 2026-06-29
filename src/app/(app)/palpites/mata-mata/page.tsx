@@ -73,8 +73,16 @@ export default async function MataMataPage() {
             (a.kickoff ?? "").localeCompare(b.kickoff ?? ""),
           );
           if (ms.length === 0) return null;
+
           const lock = lockMap.get(round);
-          const locked = isLocked(lock?.deadline ?? null, lock?.is_locked ?? false);
+          const roundAdminLocked = lock?.is_locked ?? false;
+
+          // Jogos ainda abertos (kickoff não passou e rodada não foi travada pelo admin)
+          const openMatches = ms.filter(
+            (m) => !isLocked(m.kickoff ?? null, roundAdminLocked),
+          );
+          const roundFullyLocked = openMatches.length === 0;
+          const nextToClose = openMatches[0]; // já ordenado por kickoff
 
           return (
             <section key={round}>
@@ -85,13 +93,17 @@ export default async function MataMataPage() {
                     {ROUND_POINTS[round]}pt
                   </span>
                 </h2>
-                <span className={locked ? "badge-closed" : "badge-open"}>
-                  {locked ? "Fechado" : `Fecha ${formatDeadline(lock?.deadline ?? null)}`}
+                <span className={roundFullyLocked ? "badge-closed" : "badge-open"}>
+                  {roundFullyLocked
+                    ? "Fechado"
+                    : `Próx. fecha ${formatDeadline(nextToClose?.kickoff ?? null)}`}
                 </span>
               </div>
 
               <div className="space-y-2">
                 {ms.map((m) => {
+                  // Cada jogo trava individualmente quando seu kickoff passa
+                  const matchLocked = isLocked(m.kickoff ?? null, roundAdminLocked);
                   const home = m.home_team_id ? teamMap.get(m.home_team_id) : null;
                   const away = m.away_team_id ? teamMap.get(m.away_team_id) : null;
                   const mine = myMap.get(m.id);
@@ -99,14 +111,15 @@ export default async function MataMataPage() {
 
                   return (
                     <div key={m.id} className="card p-3">
-                      {!locked && home && away && user.is_paid ? (
+                      {!matchLocked && home && away && user.is_paid ? (
                         <MatchPredictionForm
                           matchId={m.id}
                           home={home}
                           away={away}
                           initialPick={mine?.picked_team_id ?? null}
+                          kickoff={m.kickoff}
                         />
-                      ) : !locked && home && away ? (
+                      ) : !matchLocked && home && away ? (
                         <div>
                           <div className="flex items-center justify-between text-sm">
                             <TeamPill team={home} size="sm" />
@@ -121,8 +134,13 @@ export default async function MataMataPage() {
                                 : "— (bloqueado até confirmar o pagamento)"}
                             </b>
                           </p>
+                          {m.kickoff && (
+                            <p className="mt-1 text-xs text-white/35">
+                              Fecha {formatDeadline(m.kickoff)}
+                            </p>
+                          )}
                         </div>
-                      ) : !locked ? (
+                      ) : !matchLocked ? (
                         <p className="text-center text-sm text-white/40">
                           Confronto a definir
                         </p>
